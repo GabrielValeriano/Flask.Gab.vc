@@ -8,7 +8,10 @@ def papel():
 
 @app.route("/necesito/salir")
 def salir():
-    return "<p>Me olvide la llave del baño Ayuda</p>"
+    return """
+    <p>Me olvide la llave del baño Ayuda</p>
+    <a href="/static/PRUEBA.html">pagina</a>
+    """
 
 @app.route("/nota/DiseñoDeSoftware/<string:nombre>")
 def notas(nombre):
@@ -23,3 +26,4 @@ def notas(nombre):
         return f"<p>La nota de {n}: 9</p>"
     if nombre == "Joel":
         return f"<p>La nota de {n}: 7</p>"
+    
