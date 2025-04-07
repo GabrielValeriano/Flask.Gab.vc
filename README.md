@@ -15,7 +15,7 @@ Para activar el entorno virtual:
 ```
 
 Instalacion del paquete de requerimientos:
-
+  
 ```
 pip install flask
 ```
@@ -28,8 +28,20 @@ Solo en la maquina local:
 flask run
 ```
 
+Te reinicia automaticamente la pagina al correrlo:
+
+```
+flask run --debug
+```
+
 Desde cualquier maquina de red:
 
 ```
 flask run -h 0.0.0.0
+```
+
+Desde otra maquina, te reinicia automaticamente la pagina:
+
+```
+flask run -h 0.0.0.0 --debug
 ```
