@@ -1,13 +1,42 @@
 from flask import Flask
 from flask import Flask, url_for
 import sqlite3
-
+from flask import render_template
 app = Flask(__name__)
 
 def dict_factory(cursor, row):
    """Arma un diccionario con los valores de la fila."""
    fields = [column[0] for column in cursor.description]
    return {key: value for key, value in zip(fields, row)}
+
+@app.route("/")
+def Principal():
+    url_nota = url_for("notas", nombre = "Gabriel")
+    url_Bpapel = url_for("papel")
+    url_llave = url_for("salir")
+
+    return f"""
+    <a href="{url_nota}">nota</a>
+    <br>
+    <a href="{url_Bpapel}">papel</a>
+    <br>
+    <a href="{url_llave}">salir</a>
+    """
+
+@app.route("/mostrar-datos-plantilla/<int:id>")
+def dato_plantilla(id):
+    AbrirConexion()
+    cursor = db.cursor()
+    cursor.execute("SELECT id, usuario, email FROM usuarios WHERE id = ?; ", (id,))
+    res = cursor.fetchone()
+    CerrarConexion()
+    usuario = None
+    email = None
+    if res != None:
+        usuario = res['usuario']
+        email = res['email']
+    return render_template("datos.html", id=id, usuario=usuario, email=email)
+
 
 def AbrirConexion():
     global db
@@ -29,20 +58,6 @@ def testDB():
     CerrarConexion()
     return f"Hay {registros} registros en la tabla usuarios"
 
-@app.route("/")
-def Principal():
-    url_nota = url_for("notas", nombre = "Gabriel")
-    url_Bpapel = url_for("papel")
-    url_llave = url_for("salir")
-
-    return F"""
-    <a href="{url_nota}">nota</a>
-    <br>
-    <a href="{url_Bpapel}">papel</a>
-    <br>
-    <a href="{url_llave}">salir</a>
-    """
-
 @app.route("/crearUsuario/<string:nombre>/<string:email>")
 def testCrear(nombre,email):
     AbrirConexion()
@@ -53,17 +68,7 @@ def testCrear(nombre,email):
     CerrarConexion()
     return f"Registro agregado ({nombre})"
 
-@app.route("/crearUsuario/<string:nombre>/<string:email>")
-def testCrear(nombre,email):
-    AbrirConexion()
-    cursor = db.cursor()
-    consulta = "INSERT INTO usuarios(usuario, email) VALUES (?, ?);"
-    cursor.execute(consulta, (nombre, email))
-    db.commit()
-    CerrarConexion()
-    return f"Registro agregado ({nombre})"
-
-@app.route("/crearUsuar")
+@app.route("/crearUsua")
 def testCrearif():
     nombre = "Juan"
     email = "juan@etec.uba.ar"
@@ -77,6 +82,17 @@ def testCrearif():
         return f"Registro agregado ({nombre})"
     else:
         return "Ya esta agregado el usuario"
+
+
+
+
+
+
+
+
+
+
+
 
 
 @app.route("/necesito/papel")
