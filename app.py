@@ -22,20 +22,26 @@ def Principal():
     <br>
     <a href="{url_llave}">salir</a>
     """
+@app.route("/Ruta/Usuarios")
+def usuarios():
 
 @app.route("/mostrar-datos-plantilla/<int:id>")
 def dato_plantilla(id):
     AbrirConexion()
     cursor = db.cursor()
-    cursor.execute("SELECT id, usuario, email FROM usuarios WHERE id = ?; ", (id,))
+    cursor.execute("SELECT id, usuario, email, telefono, direccion FROM usuarios WHERE id = ?; ", (id,))
     res = cursor.fetchone()
     CerrarConexion()
     usuario = None
     email = None
+    direccion = None
+    telefono = None
     if res != None:
         usuario = res['usuario']
         email = res['email']
-    return render_template("datos.html", id=id, usuario=usuario, email=email)
+        telefono = res['telefono']
+        direccion = res['direccion']
+    return render_template("datos.html", id=id, usuario=usuario, email=email, telefono=telefono, direccion=direccion)
 
 
 def AbrirConexion():
